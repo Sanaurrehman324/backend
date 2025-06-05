@@ -22,7 +22,7 @@ const CartPage = () => {
   // Get Braintree token
   const getToken = async () => {
     try {
-      const { data } = await axios.get("/api/product/braintree/token");
+      const { data } = await axios.get("https://backendfyp-production.up.railway.app/api/product/braintree/token");
       setClientToken(data?.clientToken);
 
     } catch (error) {
@@ -72,7 +72,7 @@ const CartPage = () => {
     setLoading(true);
     try {
       const { nonce } = await dropinInstance.current.requestPaymentMethod();
-      const { data } = await axios.post("/api/product/braintree/payment", {
+      const { data } = await axios.post("https://backendfyp-production.up.railway.app/api/product/braintree/payment", {
         nonce,
         cart,
       });
@@ -90,10 +90,12 @@ const CartPage = () => {
 
       if (data && data.success) {
         alert("Payment Successful");
-        window.open('https://canvas-done.vercel.app/', '_blank');
+        // window.open('https://3-d-canvas-x.vercel.app/', '_blank');
+        setDownloadLinks(links);
       } else {
         alert("Payment Successful");
-        window.open('https://canvas-done.vercel.app/', '_blank');
+        // window.open('https://3-d-canvas-x.vercel.app/', '_blank');
+        setDownloadLinks(links);
       }
 
       setCart([]);
@@ -109,9 +111,9 @@ const CartPage = () => {
           url: item.modelURL,
         }));
 
-      setDownloadLinks(links);
 
-      alert("There was a problem processing your payment, but you can still access downloads.");
+
+      alert("There was a problem processing your payment, downloads cann not be accessed.");
     }
   };
   const totalPrice = () => {
