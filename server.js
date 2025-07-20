@@ -17,10 +17,10 @@ const app = express();
 
 // ✅ CORS Configuration
 const corsOptions = {
-    origin: "https://front-end-eight-opal.vercel.app", // frontend domain
-    credentials: true,
+    origin: "https://front-end-eight-pied.vercel.app", // frontend domain
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 };
 
 // ✅ Middleware
