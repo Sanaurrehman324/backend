@@ -165,9 +165,15 @@ const deleteProductController = async (req, res) => {
   }
 };
 // update product controller
+//update product
 const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, size, modelURL, photo, viewerURL } = req.body;
+    let { name, description, price, category, size, modelURL, photo, viewerURL } = req.body;
+
+    // Parse photo if stringified JSON
+    if (typeof photo === "string") {
+      photo = JSON.parse(photo);
+    }
 
     // Validation
     switch (true) {
@@ -191,16 +197,23 @@ const updateProductController = async (req, res) => {
         price,
         category,
         size,
-        modelURL,   // ✅ new field
+        modelURL,
         slug: slugify(name),
         viewerURL: viewerURL || "",
       },
       { new: true }
     );
 
+    if (!product) {
+      return res.status(404).send({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
     if (photo) {
       product.photo = Array.isArray(photo)
-        ? photo.map((url) => ({ url }))
+        ? photo.map((p) => (typeof p === "string" ? { url: p } : p))
         : [{ url: photo }];
     }
 
@@ -212,7 +225,7 @@ const updateProductController = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Update Error =>", error);
     res.status(500).send({
       success: false,
       message: "Error in updating product",
